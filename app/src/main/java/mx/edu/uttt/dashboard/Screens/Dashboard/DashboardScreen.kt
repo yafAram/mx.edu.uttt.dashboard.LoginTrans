@@ -12,12 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.patrykandpatrick.vico.compose.legend.verticalLegend
 import mx.edu.uttt.dashboard.R
 import mx.edu.uttt.dashboard.components.*
 
 @Composable
-fun DashboardScreen(modifier: Modifier = Modifier) {
+fun DashboardScreen(modifier: Modifier = Modifier, onNavigateToEmployees: () -> Unit) {
     val config = LocalConfiguration.current
     val isTablet = config.smallestScreenWidthDp >= 600
 
@@ -32,7 +31,12 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
                     NavItem(R.drawable.ic_users, "Empleados", false),
                     NavItem(R.drawable.ic_settings, "Configuración", false)
                 ),
-                onItemSelected = {}
+                onItemSelected = { item ->
+                    when (item.label) {
+                        "Empleados" -> onNavigateToEmployees()
+                        else        -> { /* aquí puedes manejar otras rutas */ }
+                    }
+                }
             )
 
             // Contenido principal

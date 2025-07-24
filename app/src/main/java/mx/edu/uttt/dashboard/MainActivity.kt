@@ -11,8 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import mx.edu.uttt.dashboard.Screens.Login.LoginScreen
+import mx.edu.uttt.dashboard.Screens.Components.UserProfile.AlertData
+import mx.edu.uttt.dashboard.Screens.Components.UserProfile.EventItem
 import mx.edu.uttt.dashboard.Screens.Dashboard.DashboardScreen
+import mx.edu.uttt.dashboard.Screens.Dashboard.EmployeeDashboardScreen
+import mx.edu.uttt.dashboard.Screens.Dashboard.EmployeeProfileData
+import mx.edu.uttt.dashboard.Screens.Login.LoginScreen
 import mx.edu.uttt.dashboard.ui.theme.DashboardTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,11 +25,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DashboardTheme {
-                // 1. Crear el controlador de navegación
                 val navController = rememberNavController()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // 2. Configurar el NavHost con las rutas
                     NavHost(
                         navController = navController,
                         startDestination = "login",
@@ -35,24 +37,66 @@ class MainActivity : ComponentActivity() {
                         composable("login") {
                             LoginScreen(
                                 onLogin = { username, password ->
-                                    // Lógica de autenticación (simulada)
                                     if (username.isNotBlank() && password.isNotBlank()) {
-                                        // 3. Navegar al dashboard
                                         navController.navigate("dashboard") {
-                                            // Limpiar el back stack para que no pueda volver al login
                                             popUpTo("login") { inclusive = true }
                                         }
-                                    } else {
-                                        println("Usuario: $username, Pass: $password")
                                     }
                                 },
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
 
-                        // Pantalla de Dashboard
+                        // Dashboard General
                         composable("dashboard") {
-                            DashboardScreen(modifier = Modifier.fillMaxSize())
+                            DashboardScreen(
+                                modifier = Modifier.fillMaxSize(),
+                                onNavigateToEmployees = {
+                                    navController.navigate("employees")
+                                }
+                            )
+                        }
+
+                        // Dashboard de Empleados
+                        composable("employees") {
+                            EmployeeDashboardScreen(
+                                modifier = Modifier.fillMaxSize(),
+                                onSearch = { /* TODO: implementar búsqueda */ },
+                                onFilter = { field, value -> /* TODO: implementar filtro */ },
+                                employees = listOf(
+                                    EmployeeProfileData(
+                                        name              = "Juan Pérez",
+                                        age               = 30,
+                                        weight            = 75,
+                                        healthStatus      = "Verde (sin alertas)",
+                                        medicalConditions = "Ninguna",
+                                        shift             = "Matutino",
+                                        area              = "Logística"
+                                    )
+                                ),
+                                alerts = listOf(
+                                    AlertData(
+                                        date    = "01 Jul 2025",
+                                        message = "Alerta de temperatura alta"
+                                    )
+                                ),
+                                indicatorsTitles = listOf("Fatiga", "Pausas"),
+                                indicatorsValues = listOf(70f, 40f),
+                                events = listOf(
+                                    EventItem(
+                                        datetime = "2025-07-23 08:00",
+                                        type     = "Temperatura",
+                                        value    = "38°C",
+                                        location = "Zona A",
+                                        action   = "Registrado"
+                                    )
+                                ),
+                                onNavigateBack = {
+                                    navController.navigate("dashboard") {
+                                        popUpTo("dashboard") { inclusive = true }
+                                    }
+                                }
+                            )
                         }
                     }
                 }
