@@ -73,4 +73,15 @@ dependencies {
     implementation("com.patrykandpatrick.vico:core:1.12.0")
     implementation("com.patrykandpatrick.vico:compose:1.12.0")
     implementation("com.patrykandpatrick.vico:compose-m3:1.12.0")
+
+    //imagenes
+    implementation ("io.coil-kt:coil-compose:2.4.0")
+
+    //para graficas
+
+    implementation ("io.github.patryk-and-patrick:vico-core:1.4.1")
+    implementation ("io.github.patryk-and-patrick:vico-compose:1.4.1")
+
+
+
 }
